@@ -1,0 +1,371 @@
+package promotion.view;
+
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Vector;
+import java.util.Date;
+import java.util.List;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
+import promotion.controller.PromotionViewControllerImpl;
+import promotion.view.PromotionViewControllerService;
+import service.PromotionService;
+import service.impl.PromotionServiceImpl;
+import po.PromotionPo;
+import vo.PromotionVo;
+
+public class PromotionView extends JPanel{
+	
+	public static void main(String args[]){
+		JFrame mFrame = new JFrame();
+		mFrame.setSize(800,600);
+		mFrame.setLocation(300,100);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = null;
+		try {
+			date = sdf.parse("2015/01/01 00:00:01");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		PromotionViewControllerService controller = new PromotionViewControllerImpl(date);
+		PromotionView view = new PromotionView(controller);
+		controller.setView(view);
+		mFrame.getContentPane().add(view);
+		mFrame.setVisible(true);
+		
+	}
+	
+	private static final long serialVersionUID = 1L;
+	
+	private PromotionViewControllerService controller;
+	
+	private PromotionService promotionService;
+	
+	private JButton newStrategyButton;
+	
+	private JButton deleteStrategyButton;
+	
+	private JButton inputDateButton;
+	
+	private JButton returnButton;
+	
+	private JTable promotionTable;
+	
+	private DefaultTableModel promotionListModel;
+	
+	private JFrame newStrategyFrame;
+	
+	private JPanel newStrategyPanel,newStrategyPanel2;
+	
+	private JLabel newStrategyLabel1,newStrategyLabel2,newStrategyLabel3,newStrategyLabel4,newStrategyLabel5;
+	
+	private JTextField newStrategyTextField1,newStrategyTextField2,newStrategyTextField3,newStrategyTextField4,newStrategyTextField5;
+
+	private JButton confirmButton;
+	
+	private JButton cancleButton;
+	
+	private Date date;
+	
+	private JFrame inputDateFrame;
+	
+	private JLabel inputDateLabel;
+	
+	private JTextField inputDateTextField;
+	
+	private PromotionPo promotionPo;
+	
+	private PromotionVo promotionVo;
+	
+	private List<PromotionPo> promotionList;
+	
+	public PromotionView(PromotionViewControllerService controller){
+		this.controller = controller;
+		this.date = controller.getDate();
+		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+		
+		//初始化操作按钮
+		initPromotionButtons();
+		
+		//初始化订单列表
+		initPromotionListTable();
+		
+		this.validate();
+	}
+	
+	private void initPromotionButtons(){
+		
+		newStrategyButton = new JButton("创建新策略");
+		//添加按钮监听事件
+		newStrategyButton.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent arg0){
+				
+				//界面跳转
+				controller.newStrategyButtonClicked();
+			}
+		});
+		
+		deleteStrategyButton = new JButton("删除原策略");
+		//添加按钮监听事件
+		deleteStrategyButton.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent arg0){
+				
+				//删除销售策略按钮点击事件
+				controller.deleteStrategyButtonClicked();
+			}
+		});
+		
+		inputDateButton = new JButton("输入日期");
+		//添加按钮监听事件
+		inputDateButton.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent arg0){
+				
+				//界面跳转
+				controller.inputDateButtonClicked();
+			}
+		});
+		
+		returnButton = new JButton("返回");
+		//添加按钮监听事件
+		returnButton.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent arg0){
+				
+				//界面跳转
+			}
+		});
+		
+		//添加策略处理栏
+		JPanel processPanel = new JPanel();
+		JPanel processPanel1 = new JPanel();	
+		processPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		processPanel.add(newStrategyButton);
+		processPanel.add(deleteStrategyButton);
+		processPanel.add(inputDateButton);
+		processPanel1.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		processPanel1.add(returnButton);
+		JPanel processPanel2 = new JPanel();
+		processPanel2.setLayout(new GridLayout(1,2));
+		processPanel2.add(processPanel);
+		processPanel2.add(processPanel1);
+		
+		newStrategyButton.setEnabled(true);
+		deleteStrategyButton.setEnabled(true);
+		inputDateButton.setEnabled(true);
+		returnButton.setEnabled(true);
+		
+		this.add(processPanel2);
+		
+	}
+	
+	private void initPromotionListTable(){
+		JScrollPane scrollPane = new JScrollPane();
+		
+		//表头
+		Vector<String> vColumns = new Vector<String>();
+		vColumns.add("策略编号");
+		vColumns.add("策略名称");
+		vColumns.add("开始日期");
+		vColumns.add("结束日期");
+		vColumns.add("折扣");
+		
+		//数据
+		Vector<PromotionVo> vData = new Vector<PromotionVo>();
+		vData.addAll(controller.observeList(date));
+		//模型
+		promotionListModel = new DefaultTableModel(vData,vColumns);
+		//表格
+		promotionTable = new JTable(promotionListModel){
+			private static final long serialVersionUID = 1L;
+			
+			public boolean isCellEditable(int row,int column){
+				return false;
+			}
+		};
+		promotionTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		scrollPane.getViewport().add(promotionTable);
+		promotionTable.setFillsViewportHeight(true);
+		this.add(scrollPane);		
+	}
+	
+	/**
+	 * 删除销售策略按钮点击事件
+	 */
+	public void deleteStrategyButtonClicked(){
+		int index = promotionTable.getSelectedRow();
+		if(index==-1){
+			JOptionPane.showMessageDialog(null,"请选择销售策略","",JOptionPane.ERROR_MESSAGE);
+		}
+		
+		String promotionName = (String)promotionTable.getValueAt(index,1);
+		promotionService = new PromotionServiceImpl(date);
+		if(promotionService.deleteStrategy(promotionName)){
+			promotionListModel.removeRow(index);
+		}else{
+			JOptionPane.showMessageDialog(null,"删除销售策略失败","",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	/**
+	 * 输入日期按钮点击事件
+	 */
+	public void inputDateButtonClicked(){
+		inputDateFrame = new JFrame();
+		inputDateFrame.setSize(600,100);
+		inputDateFrame.setLocation(400, 200);
+		
+		inputDateLabel = new JLabel("请输入日期(yyyy-MM-dd HH:mm:ss)：");
+		inputDateTextField = new JTextField(25);
+		confirmButton = new JButton("确定");
+		//确定显示
+		confirmButton.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent arg0){
+				String newDateS = inputDateTextField.getText();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date newDate = null;
+				try {
+					newDate = sdf.parse(newDateS);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				promotionListModel.setRowCount(0);
+				for(PromotionVo prmotionVo : controller.observeList(newDate)){
+					promotionListModel.addRow(prmotionVo);
+				}
+				inputDateFrame.dispose();
+			}
+		});
+		cancleButton = new JButton("取消");
+		//取消显示
+		cancleButton.addActionListener(new ActionListener(){
+					
+			public void actionPerformed(ActionEvent e){
+				//关闭窗口
+				inputDateFrame.dispose();
+			}
+		});
+		
+		JPanel inputDatePanel1 = new JPanel();
+		JPanel inputDatePanel2 = new JPanel();
+		inputDatePanel1.setLayout(new FlowLayout(FlowLayout.CENTER));
+		inputDatePanel2.setLayout(new GridLayout(2,2));
+		inputDatePanel2.add(inputDateLabel);
+		inputDatePanel2.add(inputDateTextField);
+		inputDatePanel2.add(confirmButton);
+		inputDatePanel2.add(cancleButton);
+		inputDatePanel1.add(inputDatePanel2);
+		
+		inputDateFrame.getContentPane().add(inputDatePanel1);
+		inputDateFrame.setVisible(true);
+		
+	}
+	
+	/**
+	 * 打开制定新销售策略界面
+	 * @param index
+	 */
+	public void newStrategyButtonClicked(){
+		
+		newStrategyFrame = new JFrame();
+		newStrategyFrame.setSize(800,200);
+		newStrategyFrame.setLocation(400,200);
+		
+		newStrategyPanel = new JPanel();
+		newStrategyPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		newStrategyLabel1 = new JLabel("策略序号（4位）");
+		newStrategyTextField1 = new JTextField(20);
+		newStrategyLabel2 = new JLabel("策略名称（不超过20字）：");
+		newStrategyTextField2 = new JTextField(35);
+		newStrategyLabel3 = new JLabel("开始时间（yyyy/MM/dd HH:mm:ss）");
+		newStrategyTextField3 = new JTextField(20);
+		newStrategyLabel4 = new JLabel("结束时间（yyyy/MM/dd HH:mm:ss）");
+		newStrategyTextField4 = new JTextField(20);
+		newStrategyLabel5 = new JLabel("折扣");
+		newStrategyTextField5 = new JTextField(20);
+		confirmButton = new JButton("确定");
+		//确定增加新策略
+		confirmButton.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent args0){
+				int index = Integer.valueOf(newStrategyTextField1.getText());
+				if(newPromotion(index)){
+					promotionVo = new PromotionVo(promotionPo);
+					promotionListModel.addRow(promotionVo);
+				};
+			}
+		});
+		cancleButton = new JButton("取消");
+		//取消制定策略
+		cancleButton.addActionListener(new ActionListener(){
+			
+			public void actionPerformed(ActionEvent e){
+				//关闭窗口
+				newStrategyFrame.dispose();
+			}
+		});
+		newStrategyPanel = new JPanel();
+		newStrategyPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		newStrategyPanel2 = new JPanel();
+		newStrategyPanel2.setLayout(new GridLayout(6,2));
+		newStrategyPanel2.add(newStrategyLabel1);
+		newStrategyPanel2.add(newStrategyTextField1);
+		newStrategyPanel2.add(newStrategyLabel2);
+		newStrategyPanel2.add(newStrategyTextField2);
+		newStrategyPanel2.add(newStrategyLabel3);
+		newStrategyPanel2.add(newStrategyTextField3);
+		newStrategyPanel2.add(newStrategyLabel4);
+		newStrategyPanel2.add(newStrategyTextField4);
+		newStrategyPanel2.add(newStrategyLabel5);
+		newStrategyPanel2.add(newStrategyTextField5);
+		newStrategyPanel2.add(confirmButton);
+		newStrategyPanel2.add(cancleButton);
+		newStrategyPanel.add(newStrategyPanel2);
+		
+		newStrategyFrame.getContentPane().add(newStrategyPanel);
+		newStrategyFrame.setVisible(true);		
+		
+	}
+	
+	//新策略确定按钮点击事件
+	private boolean newPromotion(int promotionNo){
+		String promotionName = newStrategyTextField2.getText();
+		String beginTime = newStrategyTextField3.getText();
+		String endTime = newStrategyTextField4.getText();
+		double discount = Double.valueOf(newStrategyTextField5.getText());
+		promotionService = new PromotionServiceImpl(date);
+		promotionPo = new PromotionPo(promotionNo,promotionName,beginTime,endTime,discount);	
+		if(promotionService.addStrategy(promotionPo)){
+			newStrategyFrame.dispose();
+			return true;
+		}
+		else{
+			JOptionPane.showMessageDialog(null,"增加销售策略失败","",JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+	}
+
+}
