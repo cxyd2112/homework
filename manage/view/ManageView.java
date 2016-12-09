@@ -34,14 +34,15 @@ import vo.UserVo;
 public class ManageView extends JPanel{
 	
 	public static void main(String args[]){
-		JFrame mFrame = new JFrame();
-		mFrame.setSize(800,600);
-		mFrame.setLocation(300,100);
+		JFrame manageFrame = new JFrame();
+		manageFrame.setSize(800,600);
+		manageFrame.setLocation(300,100);
 		ManageViewControllerService controller = new ManageViewControllerImpl();
 		ManageView view = new ManageView(controller);
 		controller.setView(view);
-		mFrame.getContentPane().add(view);
-		mFrame.setVisible(true);
+		manageFrame.setTitle("人员管理");
+		manageFrame.getContentPane().add(view);
+		manageFrame.setVisible(true);
 	}
 	
 	private int userID;
@@ -220,6 +221,7 @@ public class ManageView extends JPanel{
 		searchFrame = new JFrame();
 		searchFrame.setSize(600, 300);
 		searchFrame.setLocation(400, 150);
+		searchFrame.setTitle("查询（修改）信息");
 		
 		int id = Integer.valueOf(userTextField.getText());
 		manageService = new ManageServiceImpl();
@@ -301,6 +303,7 @@ public class ManageView extends JPanel{
 		newMemberFrame = new JFrame();
 		newMemberFrame.setSize(500, 250);
 		newMemberFrame.setLocation(400, 200);
+		newMemberFrame.setTitle("添加新人员");
 		
 		newMemberPanel = new JPanel();
 		newMemberPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -387,6 +390,7 @@ public class ManageView extends JPanel{
 		newHotelFrame = new JFrame();
 		newHotelFrame.setSize(600, 200);
 		newHotelFrame.setLocation(400, 200);
+		newHotelFrame.setTitle("添加酒店");
 		
 		newHotelLabel1 = new JLabel("酒店ID");
 		newHotelLabel2 = new JLabel("酒店名称");

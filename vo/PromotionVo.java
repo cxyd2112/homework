@@ -10,6 +10,7 @@ import po.PromotionPo;
  * beginTime	策略开始时间
  * endTime		策略结束时间
  * discount     策略折扣
+ * place        服务范围
  * @author summer
  */
 
@@ -20,14 +21,16 @@ public class PromotionVo extends Vector<String>{
 		this.add(promotionPo.getBeginTime());
 		this.add(promotionPo.getEndTime());
 		this.add(String.valueOf(promotionPo.getDiscount()));
+		this.add(promotionPo.getPlace());
 	}
 	
-	public PromotionVo(int promotionNo,String promotionName,String beginTime,String endTime,double discount){
+	public PromotionVo(int promotionNo,String promotionName,String beginTime,String endTime,double discount,String place){
 		this.add(String.valueOf(promotionNo));
 		this.add(promotionName);
 		this.add(beginTime);
 		this.add(endTime);
 		this.add(String.valueOf(discount));
+		this.add(place);
 	}
 	
 	public int getPromotionNo(){
@@ -48,6 +51,10 @@ public class PromotionVo extends Vector<String>{
 	
 	public double getDiscount(){
 		return Integer.valueOf(this.get(4));
+	}
+	
+	public String getPlace(){
+		return this.get(5);
 	}
 
 }

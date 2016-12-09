@@ -6,6 +6,7 @@ package po;
  * beginTime	策略开始时间
  * endTime		策略结束时间
  * discount     策略折扣
+ * place        服务范围
  * @author summer
  */
 
@@ -21,18 +22,21 @@ public class PromotionPo {
 	
 	private double discount;
 	
+	private String place;
+	
 	public PromotionPo(){
 		super();
 	}
 	
 	public PromotionPo(int promotionNo,String promotionName,String beginTime,
-			String endTime,double discount){
+			String endTime,double discount,String place){
 		super();
 		this.promotionNo = promotionNo;
 		this.promotionName = promotionName;
 		this.beginTime = beginTime;
 		this.endTime = endTime;
 		this.discount = discount;
+		this.place = place;
 	}
 	
 	public int getPromotionNo(){
@@ -73,6 +77,14 @@ public class PromotionPo {
 	
 	public void setDiscount(double discount){
 		this.discount = discount;
+	}
+	
+	public String getPlace(){
+		return place;
+	}
+	
+	public void setPlace(String place){
+		this.place = place;
 	}
 
 }

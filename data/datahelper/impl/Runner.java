@@ -3,6 +3,7 @@ package data.datahelper.impl;
 import java.sql.*;
 
 public class Runner {
+	
 	 private String url = "jdbc:mysql://localhost:3306/software?useUnicode=true&characterEncoding=utf8&useSSL=true";
 	 private String user = "root";
 	 private String password = "21120903dlam";
@@ -21,8 +22,8 @@ public class Runner {
        return conn;
    }
 
-//   数据库读操作
-   String read(String sql){
+ //   数据库读操作
+   public String read(String sql){
        Connection conn = this.getcon();
        String result="";
        try {

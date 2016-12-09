@@ -9,6 +9,7 @@ import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,9 +36,10 @@ import vo.PromotionVo;
 public class PromotionView extends JPanel{
 	
 	public static void main(String args[]){
-		JFrame mFrame = new JFrame();
-		mFrame.setSize(800,600);
-		mFrame.setLocation(300,100);
+		JFrame promotionFrame = new JFrame();
+		promotionFrame.setSize(800,600);
+		promotionFrame.setLocation(300,100);
+		promotionFrame.setTitle("查看销售策略");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = null;
 		try {
@@ -48,8 +50,8 @@ public class PromotionView extends JPanel{
 		PromotionViewControllerService controller = new PromotionViewControllerImpl(date);
 		PromotionView view = new PromotionView(controller);
 		controller.setView(view);
-		mFrame.getContentPane().add(view);
-		mFrame.setVisible(true);
+		promotionFrame.getContentPane().add(view);
+		promotionFrame.setVisible(true);
 		
 	}
 	
@@ -75,7 +77,9 @@ public class PromotionView extends JPanel{
 	
 	private JPanel newStrategyPanel,newStrategyPanel2;
 	
-	private JLabel newStrategyLabel1,newStrategyLabel2,newStrategyLabel3,newStrategyLabel4,newStrategyLabel5;
+	private JComboBox<String> newStrategyCombobox1,newStrategyCombobox2,newStrategyCombobox3;
+	
+	private JLabel newStrategyLabel1,newStrategyLabel2,newStrategyLabel3,newStrategyLabel4,newStrategyLabel5,newStrategyLabel6;
 	
 	private JTextField newStrategyTextField1,newStrategyTextField2,newStrategyTextField3,newStrategyTextField4,newStrategyTextField5;
 
@@ -189,6 +193,7 @@ public class PromotionView extends JPanel{
 		vColumns.add("开始日期");
 		vColumns.add("结束日期");
 		vColumns.add("折扣");
+		vColumns.add("服务范围");
 		
 		//数据
 		Vector<PromotionVo> vData = new Vector<PromotionVo>();
@@ -279,6 +284,7 @@ public class PromotionView extends JPanel{
 		inputDatePanel2.add(cancleButton);
 		inputDatePanel1.add(inputDatePanel2);
 		
+		inputDateFrame.setTitle("输入日期");
 		inputDateFrame.getContentPane().add(inputDatePanel1);
 		inputDateFrame.setVisible(true);
 		
@@ -291,14 +297,14 @@ public class PromotionView extends JPanel{
 	public void newStrategyButtonClicked(){
 		
 		newStrategyFrame = new JFrame();
-		newStrategyFrame.setSize(800,200);
+		newStrategyFrame.setSize(700,300);
 		newStrategyFrame.setLocation(400,200);
 		
 		newStrategyPanel = new JPanel();
 		newStrategyPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		newStrategyLabel1 = new JLabel("策略序号（4位）");
 		newStrategyTextField1 = new JTextField(20);
-		newStrategyLabel2 = new JLabel("策略名称（不超过20字）：");
+		newStrategyLabel2 = new JLabel("策略名称（不超过20字）");
 		newStrategyTextField2 = new JTextField(35);
 		newStrategyLabel3 = new JLabel("开始时间（yyyy/MM/dd HH:mm:ss）");
 		newStrategyTextField3 = new JTextField(20);
@@ -306,6 +312,31 @@ public class PromotionView extends JPanel{
 		newStrategyTextField4 = new JTextField(20);
 		newStrategyLabel5 = new JLabel("折扣");
 		newStrategyTextField5 = new JTextField(20);
+		newStrategyLabel6 = new JLabel("服务范围");
+		newStrategyCombobox1 = new JComboBox<String>();
+			List<String> list=new ArrayList<String>();
+			list.add("全国");
+			list.add("江苏");
+			list.add("辽宁");		
+			for(String str : list){
+				newStrategyCombobox1.addItem(str);
+			}
+		newStrategyCombobox2 = new JComboBox<String>();
+			list=new ArrayList<String>();
+			list.add("全省");
+			list.add("南京");
+			list.add("苏州");		
+			for(String str : list){
+				newStrategyCombobox2.addItem(str);
+			}
+		newStrategyCombobox3 = new JComboBox<String>();
+			list=new ArrayList<String>();
+			list.add("全区/商圈");
+			list.add("新街口");
+			list.add("栖霞区");		
+			for(String str : list){
+				newStrategyCombobox3.addItem(str);
+			}
 		confirmButton = new JButton("确定");
 		//确定增加新策略
 		confirmButton.addActionListener(new ActionListener(){
@@ -328,23 +359,39 @@ public class PromotionView extends JPanel{
 			}
 		});
 		newStrategyPanel = new JPanel();
-		newStrategyPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		newStrategyPanel2 = new JPanel();
-		newStrategyPanel2.setLayout(new GridLayout(6,2));
-		newStrategyPanel2.add(newStrategyLabel1);
-		newStrategyPanel2.add(newStrategyTextField1);
-		newStrategyPanel2.add(newStrategyLabel2);
-		newStrategyPanel2.add(newStrategyTextField2);
-		newStrategyPanel2.add(newStrategyLabel3);
-		newStrategyPanel2.add(newStrategyTextField3);
-		newStrategyPanel2.add(newStrategyLabel4);
-		newStrategyPanel2.add(newStrategyTextField4);
-		newStrategyPanel2.add(newStrategyLabel5);
-		newStrategyPanel2.add(newStrategyTextField5);
-		newStrategyPanel2.add(confirmButton);
-		newStrategyPanel2.add(cancleButton);
-		newStrategyPanel.add(newStrategyPanel2);
+		newStrategyLabel1.setBounds(200,10,100,30);
+		newStrategyTextField1.setBounds(350,10,200,30);
+		newStrategyLabel2.setBounds(150,50,200,30);
+		newStrategyTextField2.setBounds(350,50,200,30);
+		newStrategyLabel3.setBounds(100,90,300,30);
+		newStrategyTextField3.setBounds(350,90,200,30);
+		newStrategyLabel4.setBounds(100,130,300,30);
+		newStrategyTextField4.setBounds(350,130,200,30);
+		newStrategyLabel5.setBounds(250,170,100,30);
+		newStrategyTextField5.setBounds(350,170,200,30);
+		newStrategyLabel6.setBounds(200,210,100,30);
+		newStrategyCombobox1.setBounds(350,210,60,30);
+		newStrategyCombobox2.setBounds(420,210,60,30);
+		newStrategyCombobox3.setBounds(490,210,80,30);
+		newStrategyPanel.setLayout(null);
+		newStrategyPanel.add(newStrategyLabel1);
+		newStrategyPanel.add(newStrategyTextField1);
+		newStrategyPanel.add(newStrategyLabel2);
+		newStrategyPanel.add(newStrategyTextField2);
+		newStrategyPanel.add(newStrategyLabel3);
+		newStrategyPanel.add(newStrategyTextField3);
+		newStrategyPanel.add(newStrategyLabel4);
+		newStrategyPanel.add(newStrategyTextField4);
+		newStrategyPanel.add(newStrategyLabel5);
+		newStrategyPanel.add(newStrategyTextField5);
+		newStrategyPanel.add(newStrategyLabel6);
+		newStrategyPanel.add(newStrategyCombobox1);
+		newStrategyPanel.add(newStrategyCombobox2);
+		newStrategyPanel.add(newStrategyCombobox3);
+		newStrategyPanel.add(confirmButton);
+		newStrategyPanel.add(cancleButton);
 		
+		newStrategyFrame.setTitle("创建新策略");
 		newStrategyFrame.getContentPane().add(newStrategyPanel);
 		newStrategyFrame.setVisible(true);		
 		
@@ -356,8 +403,9 @@ public class PromotionView extends JPanel{
 		String beginTime = newStrategyTextField3.getText();
 		String endTime = newStrategyTextField4.getText();
 		double discount = Double.valueOf(newStrategyTextField5.getText());
+		String place = (String)newStrategyCombobox1.getSelectedItem()+(String)newStrategyCombobox2.getSelectedItem()+(String)newStrategyCombobox3.getSelectedItem();
 		promotionService = new PromotionServiceImpl(date);
-		promotionPo = new PromotionPo(promotionNo,promotionName,beginTime,endTime,discount);	
+		promotionPo = new PromotionPo(promotionNo,promotionName,beginTime,endTime,discount,place);	
 		if(promotionService.addStrategy(promotionPo)){
 			newStrategyFrame.dispose();
 			return true;

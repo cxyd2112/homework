@@ -30,8 +30,9 @@ public class PromotionDataTxtHelper implements PromotionDataHelper{
 				String beginTime = data[2];
 				String endTime = data[3];
 				double discount = Double.valueOf(data[4]);
+				String place = data[5];
 				
-				PromotionPo promotionPo = new PromotionPo(promotionNo,promotionName,beginTime,endTime,discount);
+				PromotionPo promotionPo = new PromotionPo(promotionNo,promotionName,beginTime,endTime,discount,place);
 				map.put(promotionName,promotionPo);
 				
 				str = br.readLine();
@@ -60,7 +61,7 @@ public class PromotionDataTxtHelper implements PromotionDataHelper{
 				Map.Entry<String, PromotionPo> entry = iterator.next();
 				PromotionPo promotionPo = entry.getValue();
 				String str = promotionPo.getPromotionNo()+";"+promotionPo.getPromotionName()+";"+
-				promotionPo.getBeginTime()+";"+promotionPo.getEndTime()+";"+promotionPo.getDiscount();
+				promotionPo.getBeginTime()+";"+promotionPo.getEndTime()+";"+promotionPo.getDiscount()+";"+promotionPo.getPlace();
 				bw.write(str);
 				bw.write("\r\n");
 			}
@@ -87,7 +88,7 @@ public class PromotionDataTxtHelper implements PromotionDataHelper{
 				String str ="";
 				if(promotionPo.getPromotionName() != promotionName){
 					str = promotionPo.getPromotionNo()+";"+promotionPo.getPromotionName()+";"+
-							promotionPo.getBeginTime()+";"+promotionPo.getEndTime()+";"+promotionPo.getDiscount();
+							promotionPo.getBeginTime()+";"+promotionPo.getEndTime()+";"+promotionPo.getDiscount()+";"+promotionPo.getPlace();
 				}	
 				bw.write(str);
 				if(str!=""){

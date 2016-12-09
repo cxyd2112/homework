@@ -10,22 +10,26 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import promotion.controller.CreditChangeViewControllerImpl;
+import service.CreditService;
+import service.impl.CreditServiceImpl;
 
 public class CreditChangeView extends JPanel{
 	
 	public static void main(String args[]){
-		JFrame mFrame = new JFrame();
-		mFrame.setSize(800, 600);
-		mFrame.setLocation(300, 100);
+		JFrame creditFrame = new JFrame();
+		creditFrame.setSize(800, 600);
+		creditFrame.setLocation(300, 100);
+		creditFrame.setTitle("恢复信用值");
 		CreditChangeViewControllerService controller = new CreditChangeViewControllerImpl();
 		CreditChangeView view = new CreditChangeView(controller);
 		controller.setView(view);
-		mFrame.getContentPane().add(view);
-		mFrame.setVisible(true);
+		creditFrame.getContentPane().add(view);
+		creditFrame.setVisible(true);
 	}
 	
 	private CreditChangeViewControllerService controller;
@@ -70,7 +74,7 @@ public class CreditChangeView extends JPanel{
 			}
 		});
 		
-		cancleButton = new JButton("取消");
+		cancleButton = new JButton("返回");
 		cancleButton.setFont(new Font("宋体",Font.BOLD,20));
 		//设置监听事件
 		cancleButton.addActionListener(new ActionListener(){
@@ -107,6 +111,13 @@ public class CreditChangeView extends JPanel{
 	public void confirmButtonClicked(){
 		int id = Integer.valueOf(creditTextField1.getText());
 		int credit = Integer.valueOf(creditTextField2.getText());
+		CreditService creditService = new CreditServiceImpl();
+		if(creditService.recoverCredit(id, credit)){
+			JOptionPane.showMessageDialog(null,"信用恢复成功","",JOptionPane.ERROR_MESSAGE);
+		}
+		else{
+			JOptionPane.showMessageDialog(null,"信用恢复失败","",JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 }
